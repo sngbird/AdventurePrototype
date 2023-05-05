@@ -2,10 +2,10 @@ A simple adventure game by {who?} based on a simple adventure game engine by [Ad
 Test Update
 Code requirements:
 - **4+ scenes based on `AdventureScene`**: unsatisfied (name at least 4 of the classes).
-- **2+ scenes *not* based on `AdventureScene`**: unsatisfied (name the classes).
+- **2+ scenes *not* based on `AdventureScene`**: Title, Logo (kinda Cheating), Outro.
 - **2+ methods or other enhancement added to the adventure game engine to simplify my scenes**:
-    - Enhancement 1: unsatisfied (name the method and explain the use of it).
-    - Enhancement 2: unsatisfied (name the method and explain the use of it).
+    - Enhancement 1: setClickable(object, message) - makes the object interactive, set mouseover message, and when clicked add it to inventory
+    - Enhancement 2: entryMessage(message) - a message that displays on first entry, clicking anywhere on screen will make it fade away.
 
 Experience requirements:
 - **4+ locations in the game world**: unsatisfied (name at least 4 of the classes).
