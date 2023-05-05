@@ -101,7 +101,7 @@ class Intro extends Phaser.Scene {
         this.add.text(50,100, "Click anywhere to begin.").setFontSize(20);
         this.input.on('pointerdown', () => {
             this.cameras.main.fade(1000, 0,0,0);
-            this.time.delayedCall(1000, () => this.scene.start('demo1'));
+            this.time.delayedCall(1000, () => this.scene.start('logo'));
         });
     }
 }
@@ -117,6 +117,50 @@ class Outro extends Phaser.Scene {
     }
 }
 
+class Logo extends Phaser.Scene{
+    constructor(){
+        super('logo')
+    }
+    preload(){
+        this.load.image('catLogo', "assets/catsnugglelogo.png")
+        this.load.image('LogoType', "assets/catsnugstudio.png")
+        this.load.audio('catPurr', "assets/purr_10.mp3")
+    }
+    create(){     
+      
+        let purring = this.sound.add('catPurr');
+        purring.play();
+        this.cameras.main.fadeIn(5000,0,0,0);
+        let logoBG = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'catLogo')
+        logoBG.setScale(.5).setScrollFactor(0)
+        let logoType = this.add.image(this.cameras.main.width /2, (this.cameras.main.height / 2)+250, 'LogoType');
+        logoType.setScale(.35);
+        this.time.delayedCall(5000, () => {
+            this.cameras.main.fadeOut(5000,0,0,0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {this.scene.start('title')})
+        })
+
+    }
+}
+class Title extends Phaser.Scene {
+    constructor() {
+        super('title')
+    }
+    preload(){
+        this.load.image('spookytrail', "assets/backgrounds/forest_path.png");
+        loadFont("witchkin", "assets/witchkin.ttf");
+    }
+    create() {
+        let background = this.add.image(this.cameras.main.width/2, this.cameras.main.height/2, 'spookytrail');
+        this.cameras.main.fadeIn(5000,0,0,0);
+        let titleText = this.add.text((this.cameras.main.width/2)-400, (this.cameras.main.height/2)-400, "Spooky Woods",{fontFamily: 'witchkin',
+        fontSize: '96px',
+        color: '#099445'});
+        
+    }
+}
+
+
 
 const game = new Phaser.Game({
     scale: {
@@ -125,7 +169,9 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, Demo1, Demo2, Outro],
+    //scene: [Logo, Intro, Demo1, Demo2, Outro],
+    scene: [Title],
+
     title: "Adventure Game",
 });
 
