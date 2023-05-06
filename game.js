@@ -512,8 +512,8 @@ const game = new Phaser.Game({
             gravity: { y: 0 }
         }
     },
-    scene: [Credits],
-    //scene: [Title, Logo, Bedroom, SpookyPath, MurkyPond, WitchesHut, Cemetary, NormalEnd, GoodEnd, Credits],
+    //scene: [Credits],
+    scene: [Title, Logo, Bedroom, SpookyPath, MurkyPond, WitchesHut, Cemetary, NormalEnd, GoodEnd, Credits],
 
     title: "Spooky Woods",
 });
