@@ -10,6 +10,8 @@ class AdventureScene extends Phaser.Scene {
     }
     preload(){
         loadFont("witchkin", "assets/witchkin.ttf");
+        this.load.image('portal', "assets/objects/portal1.png");
+
     }
     create() {
         this.transitionDuration = 1000;
@@ -206,18 +208,22 @@ class AdventureScene extends Phaser.Scene {
         object.on('pointerover', () => this.showMessage(mouseOverMsg))
         .on('drag', (pointer, dragX, dragY) => object.setPosition(dragX, dragY));
     }
-    createPortal(object){
+    createPortal(x,y,msg,newScene){
+        let portal = this.add.sprite(x,y,'portal');
+        portal.setAlpha(0);
+        portal.setScale(.15);
         this.tweens.add({
-            targets: object,
+            targets: portal,
             rotation: 360,
             duration: 3000,
             repeat: -1,
         })
         this.tweens.add({
-            targets: object,
+            targets: portal,
             alpha: { from: 0, to: 1},
             duration: 2000,
         })
+        this.setZoneOver(portal, msg, newScene);
     }
 
 }
