@@ -104,7 +104,7 @@ class SpookyPath extends AdventureScene {
                     this.beehive.destroy();
                 }
             })
-            this.showMessage("You smack the beehive with the walking stick, it falls to the ground revealing stick honeycomb. No bees luckily.")
+            this.showMessage("You smack the beehive with the walking stick, it falls to the ground revealing sticky honey. Oddly there are no bees.")
             this.gainItem("A Cool Walking Stick");
             this.gainItem("Honey");
         }  
