@@ -82,6 +82,8 @@ class Bedroom extends AdventureScene {
 class SpookyPath extends AdventureScene {
     constructor() {
         super("spookypath", "Forest Path");
+        let stick;
+        let beehive;
     }
     preload() {
         this.load.image('spookytrail', "assets/backgrounds/forest_path.png");
@@ -93,37 +95,98 @@ class SpookyPath extends AdventureScene {
         background.setScale(.5);
         this.entryMessage("You are pulled through the portal into the woods. Its colder than your room, and as your eyes adjust you realize that it is night here. Where could this place be? \nThere are no visible street lights, but the moon lluminates the path in front of you.", 2 * this.s);
         
-        let stick = this.add.sprite(this.w * .18, this.w*.5, 'Walking Stick');
-        stick.setScale(.25);
-        stick.setRotation(.75);
-        console.log(stick.texture.key);
-        this.setDragable(stick, "That's a cool walking stick!");
+        this.stick = this.physics.add.image(this.w * .18, this.w*.5, 'Walking Stick');
+        this.stick.setScale(.25);
+        this.stick.setRotation(.75);
+        this.setDragable(this.stick, "That's a cool walking stick!");
 
-        let beehive = this.add.sprite(this.w * .4, this.w *.2, 'Bee Hive');
-        beehive.setScale(.25)
-        // this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
-        //     .setFontSize(this.s * 2)
-        //     .setInteractive()
-        //     .on('pointerover', () => {
-        //         this.showMessage("You've got no other choice, really.");
-        //     })
-        //     .on('pointerdown', () => {
-        //         this.gotoScene('demo1');
-        //     });
+        this.beehive = this.physics.add.sprite(this.w * .4, this.w *.2, 'Bee Hive');
+        this.beehive.setScale(.25);
 
-        // let finish = this.add.text(this.w * 0.6, this.w * 0.2, '(finish the game)')
-        //     .setInteractive()
-        //     .on('pointerover', () => {
-        //         this.showMessage('*giggles*');
-        //         this.tweens.add({
-        //             targets: finish,
-        //             x: this.s + (this.h - 2 * this.s) * Math.random(),
-        //             y: this.s + (this.h - 2 * this.s) * Math.random(),
-        //             ease: 'Sine.inOut',
-        //             duration: 500
-        //         });
-        //     })
-        //     .on('pointerdown', () => this.gotoScene('outro'));
+        let witchesPath = this.add.rectangle(this.w*.34, this.w* .32, 150,150, '0xeb344c', 0);
+        this.setZoneOver(witchesPath,"Smoke rises from a house in the distance.","witcheshut");
+
+        let hiddenPath = this.add.rectangle(this.w*.6, this.w* .38, 125,125, '0xeb344c', 0);
+        this.setZoneOver(hiddenPath,"Some animal tracks seem to lead off in this direction…","murkypond");
+    }
+    update(){
+        if(this.physics.world.collide(this.stick,this.beehive,)){
+            this.stick.destroy();
+            this.tweens.add({
+                targets: this.beehive,
+                y: `-=${2 * this.s}`,
+                alpha: { from: 1, to: 0 },
+                duration: 500,
+                onComplete: () => {
+                    this.beehive.destroy();
+                }
+            })
+            this.showMessage("You smack the beehive with the walking stick, it falls to the ground revealing stick honeycomb. No bees luckily.")
+            this.gainItem("A Cool Walking Stick");
+            this.gainItem("Honey");
+        }  
+        
+    }
+}
+
+class MurkyPond extends AdventureScene {
+    constructor() {
+        super("murkypond", "A Murky Pond");
+    }
+    preload() {
+        this.load.image('murkypond', "assets/backgrounds/murkypond.png");
+        loadFont("witchkin", "assets/witchkin.ttf");
+        this.load.image('Echinacea', "assets/objects/echinacea.png");
+        
+    }
+    onEnter() {
+        let background = this.add.image(this.cameras.main.width/2.75, this.cameras.main.height/2, 'murkypond');
+        background.setScale(.5);
+        this.entryMessage("You walk along the hidden trail in the dark, the moonlight breaking through the trees to illuminate your path with diffuse light. The air is cool but pleasant and after a few minutes of listening to the sound of insects and frogs you come upon a murky pond.",2 * this.s);
+
+        let pondwater = this.add.rectangle(this.w*.45, this.w* .38, 250,250, '0xeb344c', 0);
+        this.setMouseOver(pondwater,"Pond water, you could collect it with an Empty Bottle");
+        if (this.hasItem("Empty Bottle")){
+            pondwater.on('pointerdown', () => {this.gainItem("Pond Water");
+        this.loseItem("Empty Bottle")})
+        }
+        let echinaceaStalk = this.add.sprite(this.w *.4, this.w*.25, 'Echinacea');
+        echinaceaStalk.setScale(.1);
+        this.setCollectable(echinaceaStalk,"A bunch of Echinacea");
+
+        let goBack = this.add.text(this.w * .65,this.w *.5, "Go Back");
+        goBack.setStyle({ fontFace: "witchkin", fontSize: "36px", color: '#52f298'})
+        
+        this.setZoneOver(goBack, "Walk back up the path", "spookypath");
+    }
+}
+
+class WitchesHut extends AdventureScene{
+    constructor() {
+        super("witcheshut", "The Witches Hut");
+    }
+    preload(){
+        this.load.image('witcheshut', "assets/backgrounds/witcheshut.png");
+        this.load.image('cauldron', "assets/objects/cauldron.png");
+        this.load.image('Tea Leaves', "assets/objects/tealeavesasset.png");
+    }
+    onEnter(){
+        let background = this.add.image(this.cameras.main.width/2.75, this.cameras.main.height/2, 'witcheshut');
+        this.entryMessage("You enter the living room of a small house. A woman whose features you can\’t seem to fully grasp greets you as you enter, “You must be the one my familiar sent to help me, I\’m a bit too sick to gather the ingredients I need you see.” She sounds congested.\n “Please bring Pond Water, Tea Leaves, Honey Comb, and Echinacea. I\’ll be able to make a healing potion with them. In exchange I\’ll help you get home, and I\’ll grant you one wish.\"",2 * this.s);
+        if (this.hasItem("Fairy in a Bottle")){
+            this.showMessage("You brought back my familiar! Thank you, you have no idea how much trouble they can cause...");
+            this.loseItem('Fairy in a Bottle');
+            this.gainItem('Incantation Scroll');
+            this.gainItem('Empty Bottle');
+        }
+        let cauldron = this.add.image(this.w*.25,this.w*.4, 'cauldron');
+        cauldron.setScale(.3);
+
+        let tealeaves = this.add.sprite(this.w *.4, this.w*.185, 'Tea Leaves');
+        tealeaves.setScale(.1);
+        this.setCollectable(tealeaves, "Drying tea leaves");
+        
+
     }
 }
 
@@ -205,6 +268,7 @@ class Title extends Phaser.Scene {
     }
 }
 
+
 function loadFont(name, url) {
     var newFont = new FontFace(name, `url(${url})`);
     newFont.load().then(function (loaded) {
@@ -221,8 +285,14 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    //scene: [Logo, Intro, Demo1, Demo2, Outro],
-    scene: [SpookyPath],
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 }
+        }
+    },
+    scene: [WitchesHut],
+    //scene: [Bedroom,SpookyPath,MurkyPond,WitchesHut],
 
     title: "Adventure Game",
 });

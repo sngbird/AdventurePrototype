@@ -30,9 +30,7 @@ class AdventureScene extends Phaser.Scene {
         this.messageBox = this.add.text(this.w * 0.75 + this.s, this.h * 0.33)
             .setStyle({ fontSize: `${2 * this.s}px`, color: '#eea' })
             .setWordWrapWidth(this.w * 0.25 - 2 * this.s);
-        
-        
-        this.entryBox;
+
         
 
         this.inventoryBanner = this.add.text(this.w * 0.75 + this.s, this.h * 0.66)
@@ -70,11 +68,11 @@ class AdventureScene extends Phaser.Scene {
     }
 
     entryMessage(message, size){
-        this.entryBox = this.add.text(this.w* .01 + this.s, this.h * 0.05)
+        let entryBox = this.add.text(this.w* .01 + this.s, this.h * 0.05)
          .setStyle({ fontFamily: 'witchkin',fontSize: `${2 * this.s}px`, color: '#52f298' })
          .setWordWrapWidth(this.w * 0.75 - 2 * this.s)
-        this.entryBox.setText(message);
-        this.entryBox.setStyle({ fontSize: `${size}px` });
+        entryBox.setText(message);
+        entryBox.setStyle({ fontSize: `${size}px` });
         this.input.on('pointerdown', () => { 
             this.tweens.add({
                 targets: this.entryBox,
@@ -82,7 +80,8 @@ class AdventureScene extends Phaser.Scene {
                 easing: 'Quintic.in',
                 duration: 2 * this.transitionDuration,
                 onComplete: () => {
-                    this.entryBox.setText('');
+                    entryBox.setText('');
+                    //entryBox.destroy();
                     //extra;
                 }
             })
@@ -176,8 +175,17 @@ class AdventureScene extends Phaser.Scene {
     onEnter() {
         console.warn('This AdventureScene did not implement onEnter():', this.constructor.name);
     }
+    setMouseOver(object, mouseOverMsg){
+        object.setInteractive()
+        .on('pointerover', () => this.showMessage(mouseOverMsg));
+    }
+    setZoneOver(object, mouseOverMsg, newZone){
+        object.setInteractive()
+        .on('pointerover', () => this.showMessage(mouseOverMsg))
+        .on('pointerdown', () => this.gotoScene(newZone));
+    }
 
-    setCollectable(object, mouseOverMsg, extra){
+    setCollectable(object, mouseOverMsg,){
         object.setInteractive()
         .on('pointerover', () => this.showMessage(mouseOverMsg))
         .on('pointerdown', () => { this.showMessage("You pick up the "+object.texture.key);
@@ -189,7 +197,6 @@ class AdventureScene extends Phaser.Scene {
             duration: 500,
             onComplete: () => {
                 object.destroy();
-                extra;
             }
         })
     })
