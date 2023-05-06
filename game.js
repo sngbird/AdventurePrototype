@@ -214,6 +214,26 @@ class WitchesHut extends AdventureScene{
         this.setZoneOver(goBack, "Walk back up the path", "spookypath");
 
         //Details
+        let ominous = this.add.rectangle(this.w*.13, this.w* .2, 400,750, '0xeb344c', 0);
+        ominous.setRotation(.35);
+        this.setMouseOver(ominous,"You\’re not sure, but you think you can hear someone crying from the mist...");
+
+        let window = this.add.rectangle(this.w*.3, this.w* .24, 150,150, '0xeb344c', 0);
+        this.setMouseOver(window,"A window to the human world (probably), it's day wherever this is watching.");
+
+        let potions = this.add.rectangle(this.w*.48, this.w* .24, 300,75, '0xeb344c', 0);
+        this.setMouseOver(potions,"Various potion ingredients, but no Echinacea");
+
+        let witch = this.add.rectangle(this.w*.34, this.w* .35, 150,175, '0xeb344c', 0);
+        this.setMouseOver(witch,"Her features seem to shift and blend together, but you're PRETTY sure she's watching you with a kind expression...");
+
+        let fireplace = this.add.rectangle(this.w*.47, this.w* .35, 150,175, '0xeb344c', 0);
+        this.setMouseOver(fireplace,"A warm fire crackles in the hearth.");
+
+        
+
+
+
         
 
     }
@@ -225,10 +245,7 @@ class WitchesHut extends AdventureScene{
                 this.loseItem("Tea Leaves");
                 this.loseItem("Honey");
                 this.loseItem("Echinacea");
-                let portal = this.add.sprite(this.w * .47, this.w*.375,'portal');
-                portal.setAlpha(0);
-                portal.setScale(.15);
-                this.createPortal(this.w* .47, this.w * .375, "Where does this one go?", "cemetary");
+                this.createPortal(this.w* .47, this.w * .355, "Where does this one go?", "cemetary");
             })
         }
     }
@@ -489,8 +506,8 @@ const game = new Phaser.Game({
             gravity: { y: 0 }
         }
     },
-    scene: [MurkyPond],
-    //scene: [Title, Logo, Bedroom, SpookyPath, MurkyPond, WitchesHut, Cemetary, NormalEnd, GoodEnd, Credits],
+    //scene: [WitchesHut],
+    scene: [Title, Logo, Bedroom, SpookyPath, MurkyPond, WitchesHut, Cemetary, NormalEnd, GoodEnd, Credits],
 
     title: "Spooky Woods",
 });
