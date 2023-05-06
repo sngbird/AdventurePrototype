@@ -84,6 +84,7 @@ class SpookyPath extends AdventureScene {
             this.setDragable(this.stick, "That's a cool walking stick!");
             this.beehive = this.physics.add.sprite(this.w * .4, this.w *.2, 'Bee Hive');
             this.beehive.setScale(.25);
+            this.setMouseOver(this.beehive,"A beehive! I bet I could get honey from there if I can knock it down with something...");
         }
 
         let witchesPath = this.add.rectangle(this.w*.34, this.w* .32, 150,150, '0xeb344c', 0);
@@ -91,6 +92,21 @@ class SpookyPath extends AdventureScene {
 
         let hiddenPath = this.add.rectangle(this.w*.6, this.w* .38, 125,125, '0xeb344c', 0);
         this.setZoneOver(hiddenPath,"Some animal tracks seem to lead off in this direction…","murkypond");
+
+        //Details
+        let owl = this.add.rectangle(this.w*.15, this.w* .1, 125,125, '0xeb344c', 0);
+        this.setMouseOver(owl,"Your eyes are drawn to the darkness here… A pair of large eyes watch you back. *Hoot*");
+
+        let moonlight = this.add.rectangle(this.w*.35, this.w* .05, 300,150, '0xeb344c', 0);
+        this.setMouseOver(moonlight,"The moon must be directly above you based on the light on the road… but why does the canopy look so dark?");
+
+
+        let scarypath = this.add.rectangle(this.w*.4, this.w* .35, 75,125, '0xeb344c', 0);
+        this.setMouseOver(scarypath,"For some reason, the moonlight doesn\’t light the path going in this direction. It\'s really foreboding, maybe it\'s best stay where it\’s well lit")
+
+        let spookyplants = this.add.rectangle(this.w*.17, this.w* .3, 175,150, '0xeb344c', 0);
+        this.setMouseOver(spookyplants,"The plants seem to blend together at night...");
+
     }
     update(){
         if(this.physics.world.collide(this.stick,this.beehive,)){
@@ -459,7 +475,7 @@ const game = new Phaser.Game({
             gravity: { y: 0 }
         }
     },
-    scene: [Credits],
+    scene: [SpookyPath],
     //scene: [Title, Logo, Bedroom, SpookyPath, MurkyPond, WitchesHut, Cemetary, NormalEnd, GoodEnd, Credits],
 
     title: "Spooky Woods",

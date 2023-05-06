@@ -65,7 +65,7 @@ class AdventureScene extends Phaser.Scene {
             targets: this.messageBox,
             alpha: { from: 1, to: 0 },
             easing: 'Quintic.in',
-            duration: 4 * this.transitionDuration
+            duration: 6 * this.transitionDuration
         });
     }
 
@@ -77,10 +77,10 @@ class AdventureScene extends Phaser.Scene {
         entryBox.setStyle({ fontSize: `${size}px` });
         this.input.on('pointerdown', () => { 
             this.tweens.add({
-                targets: this.entryBox,
+                targets: entryBox,
                 alpha: { from: 1, to: 0 },
                 easing: 'Quintic.in',
-                duration: 4 * this.transitionDuration,
+                duration: 2000,
                 onComplete: () => {
                     entryBox.setText('');
                     //entryBox.destroy();
