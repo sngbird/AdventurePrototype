@@ -293,20 +293,78 @@ class GoodEnd extends Phaser.Scene{
     }
     preload(){
         this.load.image('bedroom', "assets/backgrounds/catbedroom.png");
+        loadFont("witchkin", "assets/witchkin.ttf");
+
     }
     create(){
-        let background = this.add.image(this.cameras.main.width/2.75, this.cameras.main.height/2, 'bedroom');
+        this.cameras.main.setBackgroundColor('#444');
+        this.cameras.main.fadeIn(1000, 0, 0, 0);
+        let background = this.add.image(this.cameras.main.width/2, this.cameras.main.height/2, 'bedroom');
+        let entryBox = this.add.text(this.cameras.main.width/5, this.cameras.main.height/8)
+         .setStyle({ fontFamily: 'witchkin',fontSize: `${2 * this.s}px`, color: '#52f298' })
+         .setWordWrapWidth(1200);
+        entryBox.setText("You step out of the portal into your room, much the way you left it before. You hear in the back of your mind \“Don\’t forget, I promised you a wish. The next time your heart truly desires something, it\’s yours.\” Today was weird, but at least you got a wish out of it…");
+        entryBox.setStyle({ fontSize: `48px` });
+        entryBox.preFX.addShadow(.5,-.5, .006, 2, 0x000000, 10);
+
+        this.input.on('pointerdown', () => { 
+            this.tweens.add({
+                targets: this.entryBox,
+                alpha: { from: 1, to: 0 },
+                easing: 'Quintic.in',
+                duration: 4 * this.transitionDuration,
+                onComplete: () => {
+                        this.cameras.main.fade(1000, 0,0,0);
+                        this.time.delayedCall(1000, () => this.scene.start('credits'));
+                    }
+            })
+        })
     }
 }
 
-class Outro extends Phaser.Scene {
+
+class NormalEnd extends Phaser.Scene{
+    constructor(){
+        super('normalend')
+    }
+    preload(){
+        this.load.image('bedroom', "assets/backgrounds/catbedroom.png");
+    }
+    create(){
+        this.cameras.main.setBackgroundColor('#444');
+        this.cameras.main.fadeIn(1000, 0, 0, 0);
+        let entryBox = this.add.text(this.cameras.main.width/5, this.cameras.main.height/8)
+        .setStyle({ fontFamily: 'witchkin',fontSize: `${2 * this.s}px`, color: '#52f298' })
+        .setWordWrapWidth(this.cameras.main.width *.66);
+       entryBox.setText("You step out of the portal to find your room is a completely trashed and your cat is missing.\nYou find yourself wishing for your cat to come home, and then you hear in your head, \“Your wish is my command! Your cat chased my familiar back to my house. I\’ll clean up the mess my familiar made because your wish was so easy. So we're square, yeah?\” \nYour cat comes tumbling out of a portal, looking freaked out but fine. What a weird day.");
+       entryBox.setStyle({ fontSize: `48px` });
+       entryBox.preFX.addShadow(.5,-.5, .006, 2, 0x000000, 10);
+
+       this.input.on('pointerdown', () => { 
+           this.tweens.add({
+               targets: this.entryBox,
+               alpha: { from: 1, to: 0 },
+               easing: 'Quintic.in',
+               duration: 4 * this.transitionDuration,
+               onComplete: () => {
+                       this.cameras.main.fade(1000, 0,0,0);
+                       this.time.delayedCall(1000, () => this.scene.start('credits'));
+                   }
+           })
+       })
+    }
+}
+
+class Credits extends Phaser.Scene {
     constructor() {
-        super('outro');
+        super('credits');
     }
     create() {
+        this.cameras.main.setBackgroundColor('#444');
+        this.cameras.main.fadeIn(1000, 0, 0, 0);
         this.add.text(50, 50, "That's all!").setFontSize(50);
         this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
-        this.input.on('pointerdown', () => this.scene.start('intro'));
+        this.input.on('pointerdown', () => this.scene.start(''));
     }
 }
 
@@ -386,8 +444,8 @@ const game = new Phaser.Game({
             gravity: { y: 0 }
         }
     },
-    // scene: [Cemetary],
-    scene: [Bedroom,SpookyPath,MurkyPond,WitchesHut,Cemetary,GoodEnd],
+    //scene: [NormalEnd,Credits],
+    scene: [Intro, Logo, Title, Bedroom,SpookyPath,MurkyPond,WitchesHut,Cemetary,GoodEnd],
 
     title: "Adventure Game",
 });

@@ -80,7 +80,7 @@ class AdventureScene extends Phaser.Scene {
                 targets: this.entryBox,
                 alpha: { from: 1, to: 0 },
                 easing: 'Quintic.in',
-                duration: 2 * this.transitionDuration,
+                duration: 4 * this.transitionDuration,
                 onComplete: () => {
                     entryBox.setText('');
                     //entryBox.destroy();
