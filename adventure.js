@@ -206,6 +206,19 @@ class AdventureScene extends Phaser.Scene {
         object.on('pointerover', () => this.showMessage(mouseOverMsg))
         .on('drag', (pointer, dragX, dragY) => object.setPosition(dragX, dragY));
     }
+    createPortal(object){
+        this.tweens.add({
+            targets: object,
+            rotation: 360,
+            duration: 3000,
+            repeat: -1,
+        })
+        this.tweens.add({
+            targets: object,
+            alpha: { from: 0, to: 1},
+            duration: 2000,
+        })
+    }
 
 }
 
