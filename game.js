@@ -146,20 +146,32 @@ class MurkyPond extends AdventureScene {
             this.entryMessage("You walk along the hidden trail in the dark, the moonlight breaking through the trees to illuminate your path with diffuse light. The air is cool but pleasant and after a few minutes of listening to the sound of insects and frogs you come upon a murky pond.",2 * this.s);
             this.firstEntry = true;
         }
+
         let pondwater = this.add.rectangle(this.w*.45, this.w* .38, 250,250, '0xeb344c', 0);
-        this.setMouseOver(pondwater,"Pond water, you could collect it with an Empty Bottle");
+        this.setMouseOver(pondwater,"The moon light reflecting off the surface of the pond gives a mirror like reflection. You could collect Pond Water with an Empty Bottle here...");
         if (this.hasItem("Empty Bottle")){
             pondwater.on('pointerdown', () => {this.gainItem("Pond Water");
         this.loseItem("Empty Bottle")})
         }
+
         let echinaceaStalk = this.add.sprite(this.w *.4, this.w*.25, 'Echinacea');
         echinaceaStalk.setScale(.1);
         this.setCollectable(echinaceaStalk,"A bunch of Echinacea");
 
         let goBack = this.add.text(this.w * .65,this.w *.5, "Go Back");
         goBack.setStyle({ fontFace: "witchkin", fontSize: "36px", color: '#52f298'})
-        
         this.setZoneOver(goBack, "Walk back up the path", "spookypath");
+        
+        //Details
+        let nightblossoms = this.add.rectangle(this.w*.5, this.w* .225, 250,150, '0xeb344c', 0);
+        this.setMouseOver(nightblossoms,"These flowers bloom at night, they're quite beautiful.")
+        
+        let ominous = this.add.rectangle(this.w*.2, this.w* .3, 250,150, '0xeb344c', 0);
+        this.setMouseOver(ominous,"You get a bad feeling about that part of the pond… Best not get too close.");
+
+        let moonlight = this.add.rectangle(this.w*.46, this.w* .15, 125,125, '0xeb344c', 0);
+        this.setMouseOver(moonlight,"The moonlight shines through the canopy here, this would be a good place for Tsukimi")
+
     }
 }
 
@@ -200,6 +212,8 @@ class WitchesHut extends AdventureScene{
         let goBack = this.add.text(this.w * .65,this.w *.5, "Go Back");
         goBack.setStyle({ fontFace: "witchkin", fontSize: "36px", color: '#52f298'})
         this.setZoneOver(goBack, "Walk back up the path", "spookypath");
+
+        //Details
         
 
     }
@@ -475,7 +489,7 @@ const game = new Phaser.Game({
             gravity: { y: 0 }
         }
     },
-    scene: [SpookyPath],
+    scene: [MurkyPond],
     //scene: [Title, Logo, Bedroom, SpookyPath, MurkyPond, WitchesHut, Cemetary, NormalEnd, GoodEnd, Credits],
 
     title: "Spooky Woods",
