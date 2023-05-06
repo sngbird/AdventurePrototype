@@ -1,3 +1,55 @@
+class Title extends Phaser.Scene {
+    constructor() {
+        super('title')
+    }
+    preload(){
+        this.load.image('spookytrail', "assets/backgrounds/forest_path.png");
+        loadFont("witchkin", "assets/witchkin.ttf");
+    }
+    create() {
+        let background = this.add.image(this.cameras.main.width/2, this.cameras.main.height/2, 'spookytrail');
+        this.cameras.main.fadeIn(5000,0,0,0);
+        let clickStart = this.add.text((this.cameras.main.width/2)-250, (this.cameras.main.height/2)+100, "Click To Begin",{fontFamily: 'witchkin',
+        fontSize: '48px',
+        color: '#52f298'});
+        clickStart.preFX.addShadow(0, 0, 0.006, 2, 0x155933, 10);
+        let titleText = this.add.text((this.cameras.main.width/2)-400, (this.cameras.main.height/2)-400, "Spooky Woods",{fontFamily: 'witchkin',
+        fontSize: '96px',
+        color: '#52f298'});
+        titleText.preFX.addShadow(5,-5, .006, 2, 0x155933, 10);
+        this.input.on('pointerdown', () => {
+            this.cameras.main.fade(1000, 0,0,0);
+            this.time.delayedCall(1000, () => this.scene.start('logo'));
+        });
+        
+        
+    }
+}
+class Logo extends Phaser.Scene{
+    constructor(){
+        super('logo')
+    }
+    preload(){
+        this.load.image('catLogo', "assets/catsnugglelogo.png")
+        this.load.image('LogoType', "assets/catsnugstudio.png")
+        this.load.audio('catPurr', "assets/purr_10.mp3")
+    }
+    create(){     
+      
+        let purring = this.sound.add('catPurr');
+        purring.play();
+        this.cameras.main.fadeIn(5000,0,0,0);
+        let logoBG = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'catLogo')
+        logoBG.setScale(.5).setScrollFactor(0)
+        let logoType = this.add.image(this.cameras.main.width /2, (this.cameras.main.height / 2)+250, 'LogoType');
+        logoType.setScale(.35);
+        this.time.delayedCall(5000, () => {
+            this.cameras.main.fadeOut(5000,0,0,0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {this.scene.start('bedroom')})
+        })
+
+    }
+}
 class Bedroom extends AdventureScene {
     constructor() {
         super("bedroom", "Your Bedroom");
@@ -274,24 +326,20 @@ class Cemetary extends AdventureScene{
     onEnter(){
         let background = this.add.image(this.cameras.main.width/2.75, this.cameras.main.height/2, 'cemetary');
         background.setScale(.5);
-        if(this.hasItem('Incantation Scroll')){
-            this.entryMessage("As you step through the fire, the witch says, \“You just need to complete the ritual to get home. Place the candles on the 3 points of the tallest tombstone, and read the incantation.\”",  2 * this.s)
-        }
-        else{
-            this.entryMessage("As you step through the fire, the witch says, \“You just need to complete the ritual to get home. Place the candles on the 3 points of the tallest tombstone, and read the incantation.\”",  2 * this.s)
-        }
+        
+        this.entryMessage("As you step through the fire, the witch says, \“You just need to complete the ritual to get home. Place the candles on the 3 points of the tallest tombstone, and read the incantation.\”",  2 * this.s)
         //Candles and Sockets
         this.candle1 = this.physics.add.sprite(this.w * .24, this.w* .35, 'candle');
         this.candle1.setScale(.1);
-        this.setDragable(this.candle1);
+        this.setDragable(this.candle1,"Place this on the tombstone with the incantation on it.");
 
         this.candle2 = this.physics.add.sprite(this.w * .485, this.w* .33, 'candle');
         this.candle2.setScale(.1);
-        this.setDragable(this.candle2);
+        this.setDragable(this.candle2, "Place this on the tombstone with the incantation on it.");
 
         this.candle3 = this.physics.add.sprite(this.w * .42, this.w* .41, 'candle'); 
         this.candle3.setScale(.1);
-        this.setDragable(this.candle3);
+        this.setDragable(this.candle3, "Place this on the tombstone with the incantation on it.");
         
         this.socket1 = this.physics.add.image(this.w* .41, this.w * .25, 'socket');
         this.socket1.setAlpha(.5);
@@ -302,6 +350,27 @@ class Cemetary extends AdventureScene{
         this.socket3 = this.physics.add.image(this.w* .435, this.w * .225, 'socket');
         this.socket3.setAlpha(.5);
         this.socket3.setScale(.15);
+
+        //details
+        let tombstone1 = this.add.rectangle(this.w*.28, this.w* .425, 150,150, '0xeb344c', 0);
+        this.setMouseOver(tombstone1,"Here lies Queen Thora. She lead her people to a great victory at the cost of her life.");
+
+        let tombstone2 = this.add.rectangle(this.w*.5, this.w* .425, 150,150, '0xeb344c', 0);
+        this.setMouseOver(tombstone2,"Here lies Ragnheidr, Daughter of Erna. She died in battle.")
+
+        let spookytrees = this.add.rectangle(this.w*.2, this.w* .25, 250,250, '0xeb344c', 0);
+        this.setMouseOver(spookytrees,"The wind blowing through the trees makes an eerie groaning noise, you really want to get out of here.");
+
+        let morning = this.add.rectangle(this.w*.4, this.w* .08, 400,350, '0xeb344c', 0);
+        this.setMouseOver(morning, "It looks like the sun is going to rise soon... How long have you been here?");
+
+        let bird = this.add.rectangle(this.w*.59, this.w* .2, 50,50, '0xeb344c', 0);
+        this.setMouseOver(bird, "*Chirp*");
+        
+        let incantation = this.add.rectangle(this.w*.43, this.w* .32, 75,150, '0xeb344c', 0);
+        this.setMouseOver(incantation, "Eiris sazun idisi sazun hera duoder. suma hapt heptidun, suma heri lezidun, suma clubodunumbi cuoniouuidi: insprinc haptbandun, inuar uigandun.");
+
+
 
 
 
@@ -321,19 +390,6 @@ class Cemetary extends AdventureScene{
     }
 }
 
-class Intro extends Phaser.Scene {
-    constructor() {
-        super('intro')
-    }
-    create() {
-        this.add.text(50,50, "Adventure awaits!").setFontSize(50);
-        this.add.text(50,100, "Click anywhere to begin.").setFontSize(20);
-        this.input.on('pointerdown', () => {
-            this.cameras.main.fade(1000, 0,0,0);
-            this.time.delayedCall(1000, () => this.scene.start('logo'));
-        });
-    }
-}
 class GoodEnd extends Phaser.Scene{
     constructor(){
         super('goodend')
@@ -411,8 +467,8 @@ class Credits extends Phaser.Scene {
         let entryBox = this.add.text(this.cameras.main.width/5, this.cameras.main.height/8)
         .setStyle({ fontFamily: 'witchkin',fontSize: `${2 * this.s}px`, color: '#52f298' })
         .setWordWrapWidth(this.cameras.main.width *.66);
-       entryBox.setText("That's the game!\n \nA simple adventure game by Lumina Kinsinger-Dang\n based on a simple adventure game engine by:\n Adam Smith: https://github.com/rndmcnlly\n \nAll assets created using Midjourney and some very mild Krita editing.\n \nClick to return to the title.");
-       entryBox.setStyle({ fontSize: `48px` });
+       entryBox.setText("That's the game!\n \nA simple adventure game by Lumina Kinsinger-Dang\n based on a simple adventure game engine by:\n Adam Smith: https://github.com/rndmcnlly\n \nAll assets created using Midjourney and some very mild Krita editing.\n\n The Incantation on the tombstone was the first Merseburg Incantation: Liberation of Prisoners, it translates to: \n\n Once sat women,\nThey sat here, then there. \n Some fastened bonds,\nSome impeded an army,\nSome unraveled fetters:\nEscape the bonds, flee the enemy! \n \nClick to return to the title.");
+       entryBox.setStyle({ fontSize: `36px` });
        entryBox.preFX.addShadow(.5,-.5, .006, 2, 0x000000, 10);
 
        this.input.on('pointerdown', () => { 
@@ -430,58 +486,8 @@ class Credits extends Phaser.Scene {
     }
 }
 
-class Logo extends Phaser.Scene{
-    constructor(){
-        super('logo')
-    }
-    preload(){
-        this.load.image('catLogo', "assets/catsnugglelogo.png")
-        this.load.image('LogoType', "assets/catsnugstudio.png")
-        this.load.audio('catPurr', "assets/purr_10.mp3")
-    }
-    create(){     
-      
-        let purring = this.sound.add('catPurr');
-        purring.play();
-        this.cameras.main.fadeIn(5000,0,0,0);
-        let logoBG = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'catLogo')
-        logoBG.setScale(.5).setScrollFactor(0)
-        let logoType = this.add.image(this.cameras.main.width /2, (this.cameras.main.height / 2)+250, 'LogoType');
-        logoType.setScale(.35);
-        this.time.delayedCall(5000, () => {
-            this.cameras.main.fadeOut(5000,0,0,0);
-            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {this.scene.start('bedroom')})
-        })
 
-    }
-}
-class Title extends Phaser.Scene {
-    constructor() {
-        super('title')
-    }
-    preload(){
-        this.load.image('spookytrail', "assets/backgrounds/forest_path.png");
-        loadFont("witchkin", "assets/witchkin.ttf");
-    }
-    create() {
-        let background = this.add.image(this.cameras.main.width/2, this.cameras.main.height/2, 'spookytrail');
-        this.cameras.main.fadeIn(5000,0,0,0);
-        let clickStart = this.add.text((this.cameras.main.width/2)-250, (this.cameras.main.height/2)+100, "Click To Begin",{fontFamily: 'witchkin',
-        fontSize: '48px',
-        color: '#52f298'});
-        clickStart.preFX.addShadow(0, 0, 0.006, 2, 0x155933, 10);
-        let titleText = this.add.text((this.cameras.main.width/2)-400, (this.cameras.main.height/2)-400, "Spooky Woods",{fontFamily: 'witchkin',
-        fontSize: '96px',
-        color: '#52f298'});
-        titleText.preFX.addShadow(5,-5, .006, 2, 0x155933, 10);
-        this.input.on('pointerdown', () => {
-            this.cameras.main.fade(1000, 0,0,0);
-            this.time.delayedCall(1000, () => this.scene.start('logo'));
-        });
-        
-        
-    }
-}
+
 
 
 function loadFont(name, url) {
@@ -506,8 +512,8 @@ const game = new Phaser.Game({
             gravity: { y: 0 }
         }
     },
-    //scene: [WitchesHut],
-    scene: [Title, Logo, Bedroom, SpookyPath, MurkyPond, WitchesHut, Cemetary, NormalEnd, GoodEnd, Credits],
+    scene: [Credits],
+    //scene: [Title, Logo, Bedroom, SpookyPath, MurkyPond, WitchesHut, Cemetary, NormalEnd, GoodEnd, Credits],
 
     title: "Spooky Woods",
 });
