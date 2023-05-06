@@ -1,5 +1,5 @@
-A simple adventure game by {who?} based on a simple adventure game engine by [Adam Smith](https://github.com/rndmcnlly).
-Test Update
+A simple adventure game by Lumina Kinsinger-Dang based on a simple adventure game engine by [Adam Smith](https://github.com/rndmcnlly).
+
 Code requirements:
 - **4+ scenes based on `AdventureScene`**: Bedroom, SpookyPath, WitchesHut, MurkyPond, Cemetary
 - **2+ scenes *not* based on `AdventureScene`**: Title, Logo (kinda Cheating), GoodEnd, NormalEnd.
@@ -20,8 +20,7 @@ Experience requirements:
 - **Some objects are themselves animated**: the portal is animated, and collectable items have an animation when you pick them up
 
 Asset sources:
-- (For each image/audio/video asset used, describe how it was created. What tool did you use to create it? Was it based on another work? If so, how did you change it, and where can we learn more about the original work for comparison? Use [Markdown link syntax](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#links).)
-
+- I used Midjourney for all of the art assets, and then edited them in Krita to make them mine.
 Code sources:
 - `adventure.js` and `index.html` were created for this project [Adam Smith](https://github.com/rndmcnlly) and edited by me.
 - `game.js` was sketched by [Adam Smith](https://github.com/rndmcnlly) and rewritten by me.

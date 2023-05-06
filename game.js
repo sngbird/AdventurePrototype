@@ -361,10 +361,25 @@ class Credits extends Phaser.Scene {
     }
     create() {
         this.cameras.main.setBackgroundColor('#444');
-        this.cameras.main.fadeIn(1000, 0, 0, 0);
-        this.add.text(50, 50, "That's all!").setFontSize(50);
-        this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
-        this.input.on('pointerdown', () => this.scene.start(''));
+        let entryBox = this.add.text(this.cameras.main.width/5, this.cameras.main.height/8)
+        .setStyle({ fontFamily: 'witchkin',fontSize: `${2 * this.s}px`, color: '#52f298' })
+        .setWordWrapWidth(this.cameras.main.width *.66);
+       entryBox.setText("That's the game!\n \nA simple adventure game by Lumina Kinsinger-Dang\n based on a simple adventure game engine by:\n Adam Smith: https://github.com/rndmcnlly\n \nAll assets created using Midjourney and some very mild Krita editing.\n \nClick to return to the title.");
+       entryBox.setStyle({ fontSize: `48px` });
+       entryBox.preFX.addShadow(.5,-.5, .006, 2, 0x000000, 10);
+
+       this.input.on('pointerdown', () => { 
+           this.tweens.add({
+               targets: this.entryBox,
+               alpha: { from: 1, to: 0 },
+               easing: 'Quintic.in',
+               duration: 4 * this.transitionDuration,
+               onComplete: () => {
+                       this.cameras.main.fade(1000, 0,0,0);
+                       this.time.delayedCall(1000, () => this.scene.start('title'));
+                   }
+           })
+       })
     }
 }
 
@@ -388,7 +403,7 @@ class Logo extends Phaser.Scene{
         logoType.setScale(.35);
         this.time.delayedCall(5000, () => {
             this.cameras.main.fadeOut(5000,0,0,0);
-            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {this.scene.start('title')})
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {this.scene.start('bedroom')})
         })
 
     }
@@ -414,7 +429,7 @@ class Title extends Phaser.Scene {
         titleText.preFX.addShadow(5,-5, .006, 2, 0x155933, 10);
         this.input.on('pointerdown', () => {
             this.cameras.main.fade(1000, 0,0,0);
-            this.time.delayedCall(1000, () => this.scene.start('bedroom'));
+            this.time.delayedCall(1000, () => this.scene.start('logo'));
         });
         
         
@@ -444,8 +459,8 @@ const game = new Phaser.Game({
             gravity: { y: 0 }
         }
     },
-    //scene: [NormalEnd,Credits],
-    scene: [Intro, Logo, Title, Bedroom,SpookyPath,MurkyPond,WitchesHut,Cemetary,GoodEnd],
+    scene: [Credits],
+    //scene: [Title, Logo, Bedroom, SpookyPath, MurkyPond, WitchesHut, Cemetary, NormalEnd, GoodEnd, Credits],
 
-    title: "Adventure Game",
+    title: "Spooky Woods",
 });
