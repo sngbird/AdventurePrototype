@@ -4,7 +4,7 @@ Code requirements:
 - **4+ scenes based on `AdventureScene`**: unsatisfied (name at least 4 of the classes).
 - **2+ scenes *not* based on `AdventureScene`**: Title, Logo (kinda Cheating), Outro.
 - **2+ methods or other enhancement added to the adventure game engine to simplify my scenes**:
-    - Enhancement 1: setClickable(object, message) - makes the object interactive, set mouseover message, and when clicked add it to inventory
+    - Enhancement 1: setCollectable(object, message) - makes the object interactive, set mouseover message, and when clicked add it to inventory
     - Enhancement 2: entryMessage(message) - a message that displays on first entry, clicking anywhere on screen will make it fade away.
 
 Experience requirements:

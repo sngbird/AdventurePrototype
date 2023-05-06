@@ -8,7 +8,9 @@ class AdventureScene extends Phaser.Scene {
         super(key);
         this.name = name;
     }
-
+    preload(){
+        loadFont("witchkin", "assets/witchkin.ttf");
+    }
     create() {
         this.transitionDuration = 1000;
 
@@ -28,6 +30,10 @@ class AdventureScene extends Phaser.Scene {
         this.messageBox = this.add.text(this.w * 0.75 + this.s, this.h * 0.33)
             .setStyle({ fontSize: `${2 * this.s}px`, color: '#eea' })
             .setWordWrapWidth(this.w * 0.25 - 2 * this.s);
+        
+        
+        this.entryBox;
+        
 
         this.inventoryBanner = this.add.text(this.w * 0.75 + this.s, this.h * 0.66)
             .setStyle({ fontSize: `${2 * this.s}px` })
@@ -61,6 +67,29 @@ class AdventureScene extends Phaser.Scene {
             easing: 'Quintic.in',
             duration: 4 * this.transitionDuration
         });
+    }
+
+    entryMessage(message, size){
+        this.entryBox = this.add.text(this.w* .01 + this.s, this.h * 0.05)
+         .setStyle({ fontFamily: 'witchkin',fontSize: `${2 * this.s}px`, color: '#52f298' })
+         .setWordWrapWidth(this.w * 0.75 - 2 * this.s)
+        this.entryBox.setText(message);
+        this.entryBox.setStyle({ fontSize: `${size}px` });
+        this.input.on('pointerdown', () => { 
+            this.tweens.add({
+                targets: this.entryBox,
+                alpha: { from: 1, to: 0 },
+                easing: 'Quintic.in',
+                duration: 2 * this.transitionDuration,
+                onComplete: () => {
+                    this.entryBox.setText('');
+                    //extra;
+                }
+            })
+        })
+        
+            
+        
     }
 
     updateInventory() {
@@ -148,4 +177,36 @@ class AdventureScene extends Phaser.Scene {
         console.warn('This AdventureScene did not implement onEnter():', this.constructor.name);
     }
 
+    setCollectable(object, mouseOverMsg, extra){
+        object.setInteractive()
+        .on('pointerover', () => this.showMessage(mouseOverMsg))
+        .on('pointerdown', () => { this.showMessage("You pick up the "+object.texture.key);
+        this.gainItem(object.texture.key);
+        this.tweens.add({
+            targets: object,
+            y: `-=${2 * this.s}`,
+            alpha: { from: 1, to: 0 },
+            duration: 500,
+            onComplete: () => {
+                object.destroy();
+                extra;
+            }
+        })
+    })
+    }
+    setDragable(object, mouseOverMsg){
+        object.setInteractive({ draggable: true});
+        object.on('pointerover', () => this.showMessage(mouseOverMsg))
+        .on('drag', (pointer, dragX, dragY) => object.setPosition(dragX, dragY));
+    }
+
+}
+
+function loadFont(name, url) {
+    var newFont = new FontFace(name, `url(${url})`);
+    newFont.load().then(function (loaded) {
+        document.fonts.add(loaded);
+    }).catch(function (error) {
+        return error;
+    });
 }
