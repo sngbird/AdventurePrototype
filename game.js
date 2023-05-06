@@ -163,30 +163,54 @@ class MurkyPond extends AdventureScene {
 
 class WitchesHut extends AdventureScene{
     constructor() {
-        super("witcheshut", "The Witches Hut");
+        super("witcheshut", "Witches Hut");
+        let cauldron;
     }
     preload(){
         this.load.image('witcheshut', "assets/backgrounds/witcheshut.png");
         this.load.image('cauldron', "assets/objects/cauldron.png");
         this.load.image('Tea Leaves', "assets/objects/tealeavesasset.png");
+        this.load.image('portal', "assets/objects/portal1.png");
     }
     onEnter(){
         let background = this.add.image(this.cameras.main.width/2.75, this.cameras.main.height/2, 'witcheshut');
-        this.entryMessage("You enter the living room of a small house. A woman whose features you can\’t seem to fully grasp greets you as you enter, “You must be the one my familiar sent to help me, I\’m a bit too sick to gather the ingredients I need you see.” She sounds congested.\n “Please bring Pond Water, Tea Leaves, Honey Comb, and Echinacea. I\’ll be able to make a healing potion with them. In exchange I\’ll help you get home, and I\’ll grant you one wish.\"",2 * this.s);
+        this.entryMessage("You enter the living room of a small house. A woman whose features you can\’t seem to fully grasp greets you as you enter, “You must be the one my familiar sent to help me, I\’m a bit too sick to gather the ingredients I need you see.” She sounds congested.\n “Please bring Pond Water, Tea Leaves, Honey, and Echinacea. I\’ll be able to make a healing potion with them. In exchange I\’ll help you get home, and I\’ll grant you one wish.\"",2 * this.s);
         if (this.hasItem("Fairy in a Bottle")){
             this.showMessage("You brought back my familiar! Thank you, you have no idea how much trouble they can cause...");
             this.loseItem('Fairy in a Bottle');
             this.gainItem('Incantation Scroll');
             this.gainItem('Empty Bottle');
         }
-        let cauldron = this.add.image(this.w*.25,this.w*.4, 'cauldron');
-        cauldron.setScale(.3);
+        this.cauldron = this.add.image(this.w*.25,this.w*.4, 'cauldron');
+        this.cauldron.setScale(.3);
+        this.setMouseOver(this.cauldron, "You need: Tea Leaves, Echinacea, Honey, and Pond Water");
+        
 
         let tealeaves = this.add.sprite(this.w *.4, this.w*.185, 'Tea Leaves');
         tealeaves.setScale(.1);
         this.setCollectable(tealeaves, "Drying tea leaves");
+
+        let goBack = this.add.text(this.w * .65,this.w *.5, "Go Back");
+        goBack.setStyle({ fontFace: "witchkin", fontSize: "36px", color: '#52f298'})
+        this.setZoneOver(goBack, "Walk back up the path", "spookypath");
         
 
+    }
+    update(){
+        if(this.hasItem("Pond Water") && this.hasItem("Tea Leaves") && this.hasItem("Honey") && this.hasItem("Echinacea")){
+            this.cauldron.setInteractive()
+            .on('pointerdown', () => {
+                this.loseItem("Pond Water");
+                this.loseItem("Tea Leaves");
+                this.loseItem("Honey");
+                this.loseItem("Echinacea");
+                let portal = this.add.sprite(this.w * .47, this.w*.375,'portal');
+                portal.setAlpha(0);
+                portal.setScale(.15);
+                this.setZoneOver(portal, "Where does this one go?", "cemetary");
+             
+            })
+        }
     }
 }
 
@@ -291,8 +315,8 @@ const game = new Phaser.Game({
             gravity: { y: 0 }
         }
     },
-    scene: [WitchesHut],
-    //scene: [Bedroom,SpookyPath,MurkyPond,WitchesHut],
+    //scene: [WitchesHut],
+    scene: [Bedroom,SpookyPath,MurkyPond,WitchesHut],
 
     title: "Adventure Game",
 });
